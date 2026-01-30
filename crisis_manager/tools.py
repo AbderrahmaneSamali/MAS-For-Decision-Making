@@ -1,13 +1,15 @@
 """
-Crisis Manager - CrewAI Tools v3.1
-Custom tools for graph traversal, risk calculation, and causal mechanism tracing.
+Crisis Manager - CrewAI Tools v3.2
+Refactored tools using shared KnowledgeService and externalized configuration.
 """
 
 import json
-import os
 from typing import Any
 from crewai.tools import BaseTool
 from pydantic import Field
+
+from .knowledge_service import get_knowledge_service, KnowledgeService
+from .config import CrisisConfig
 
 
 class GraphSearchTool(BaseTool):
@@ -18,86 +20,31 @@ class GraphSearchTool(BaseTool):
     matching the given keywords. Returns matched nodes with relevance scores.
     Use this to find relevant precedents and mechanisms for a given scenario."""
     
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
-    
     def _run(self, query: str) -> str:
         """Search for nodes matching the query keywords."""
-        keywords = [k.strip().lower() for k in query.split(",")]
-        results = []
+        ks = get_knowledge_service()
+        keywords = [k.strip() for k in query.split(",")]
         
-        # Search cases
-        for case in self.knowledge_base.get("cases", []):
-            tags = [t.lower() for t in case.get("tags", [])]
-            matches = sum(1 for k in keywords if any(k in t for t in tags))
-            if matches > 0:
-                results.append({
-                    "id": case["id"],
-                    "type": case["type"],
-                    "title": case.get("title", ""),
-                    "match_score": matches / len(keywords),
-                    "sentiment": case.get("sentiment", 0),
-                    "dilemma": case.get("dilemma", ""),
-                    "key_fact": case.get("key_fact", "")
-                })
+        results = ks.search_by_keywords(keywords)
         
-        # Search precedents
-        for prec in self.knowledge_base.get("precedents", []):
-            tags = [t.lower() for t in prec.get("tags", [])]
-            matches = sum(1 for k in keywords if any(k in t for t in tags))
-            if matches > 0:
-                results.append({
-                    "id": prec["id"],
-                    "type": prec["type"],
-                    "action": prec.get("action", ""),
-                    "consequence": prec.get("consequence", ""),
-                    "match_score": matches / len(keywords),
-                    "sentiment": prec.get("sentiment", 0),
-                    "legal_citation": prec.get("legal_citation", "")
-                })
+        # Format results
+        formatted = []
+        for node in results[:CrisisConfig.MAX_SEARCH_RESULTS]:
+            formatted.append({
+                "id": node.get("id"),
+                "type": node.get("type", node.get("_collection", "")),
+                "match_score": node.get("match_score", 0),
+                "title": node.get("title", node.get("description", "")),
+                "sentiment": node.get("sentiment"),
+                "action": node.get("action"),
+                "consequence": node.get("consequence"),
+                "legal_citation": node.get("legal_citation")
+            })
         
-        # Search actions (v3.1)
-        for action in self.knowledge_base.get("actions", []):
-            tags = [t.lower() for t in action.get("tags", [])]
-            keywords_list = [k.lower() for k in action.get("keywords", [])]
-            matches = sum(1 for k in keywords if any(k in t for t in tags + keywords_list))
-            if matches > 0:
-                results.append({
-                    "id": action["id"],
-                    "type": "Action",
-                    "description": action.get("description", ""),
-                    "match_score": matches / len(keywords)
-                })
-        
-        # Search mechanisms (v3.1)
-        for mech in self.knowledge_base.get("mechanisms", []):
-            tags = [t.lower() for t in mech.get("tags", [])]
-            matches = sum(1 for k in keywords if any(k in t for t in tags))
-            if matches > 0:
-                results.append({
-                    "id": mech["id"],
-                    "type": mech["type"],
-                    "definition": mech.get("definition", ""),
-                    "effect": mech.get("effect", ""),
-                    "match_score": matches / len(keywords)
-                })
-        
-        # Sort by match score
-        results.sort(key=lambda x: x["match_score"], reverse=True)
-        
-        if not results:
+        if not formatted:
             return "No matching nodes found."
         
-        return json.dumps(results[:7], indent=2, ensure_ascii=False)
+        return json.dumps(formatted, indent=2, ensure_ascii=False)
 
 
 class RuleLookupTool(BaseTool):
@@ -106,58 +53,29 @@ class RuleLookupTool(BaseTool):
     name: str = "rule_lookup"
     description: str = """Retrieve rules and heuristics from the knowledge base.
     Returns rules with their weights for conflict resolution.
-    Use weight values to determine which rules take precedence."""
-    
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
+    Use weight values to determine which rules take precedence.
+    Law_Hard (weight 10) always overrides Heuristic_Soft (weight 4-9)."""
     
     def _run(self, rule_type: str = "all") -> str:
         """Get rules by type: 'hard', 'soft', or 'all'."""
-        rules = self.knowledge_base.get("rules", [])
-        
-        if rule_type.lower() == "hard":
-            rules = [r for r in rules if r["type"] == "Law_Hard"]
-        elif rule_type.lower() == "soft":
-            rules = [r for r in rules if r["type"] == "Heuristic_Soft"]
-        
-        # Sort by weight
-        rules.sort(key=lambda x: x.get("weight", 0), reverse=True)
-        
+        ks = get_knowledge_service()
+        rules = ks.get_rules_by_type(rule_type)
         return json.dumps(rules, indent=2, ensure_ascii=False)
 
 
 class RiskCalculatorTool(BaseTool):
-    """Tool for calculating risk scores with mechanism multipliers (v3.1)."""
+    """Tool for calculating risk scores with mechanism multipliers."""
     
     name: str = "risk_calculator"
     description: str = """Calculate Financial, Ethical, and Legal risk scores (0-10) 
-    for a given scenario. Now includes mechanism multipliers for second-order effects.
+    for a given scenario. Includes mechanism multipliers for second-order effects.
     Input should describe the scenario and any triggered mechanisms.
     Formula: Total Risk = (Base Fine * Concealment Multiplier) + Lost Insurance."""
     
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
-    
     def _run(self, scenario_json: str) -> str:
         """Calculate risk scores with mechanism effects."""
+        ks = get_knowledge_service()
+        
         try:
             scenario = json.loads(scenario_json)
         except json.JSONDecodeError:
@@ -165,14 +83,10 @@ class RiskCalculatorTool(BaseTool):
         
         desc = str(scenario).lower()
         
-        # Base scores
-        high_financial = ["million", "bankruptcy", "critical", "40%", "major", "insurance"]
-        high_ethical = ["fraud", "corruption", "deception", "lie", "steal", "bribe", "conceal", "hide"]
-        high_legal = ["criminal", "felony", "gdpr", "sanction", "lawsuit", "prison", "72h"]
-        
-        financial_score = min(10, 3 + sum(2 for k in high_financial if k in desc))
-        ethical_score = min(10, 3 + sum(2 for k in high_ethical if k in desc))
-        legal_score = min(10, 3 + sum(2 for k in high_legal if k in desc))
+        # Base scores using config keywords
+        financial_score = min(10, 3 + sum(2 for k in CrisisConfig.HIGH_FINANCIAL_KEYWORDS if k in desc))
+        ethical_score = min(10, 3 + sum(2 for k in CrisisConfig.HIGH_ETHICAL_KEYWORDS if k in desc))
+        legal_score = min(10, 3 + sum(2 for k in CrisisConfig.HIGH_LEGAL_KEYWORDS if k in desc))
         
         # Check for mechanism triggers
         mechanisms_triggered = []
@@ -180,20 +94,20 @@ class RiskCalculatorTool(BaseTool):
         insurance_loss = 0
         
         # Check concealment
-        if any(k in desc for k in ["conceal", "hide", "delay", "cover up", "wait"]):
+        if any(k in desc for k in CrisisConfig.CONCEALMENT_KEYWORDS):
             mechanisms_triggered.append("CONCEPT_CONCEALMENT_MULTIPLIER")
-            multiplier = 3.5
+            multiplier = CrisisConfig.CONCEALMENT_MULTIPLIER
             legal_score = min(10, legal_score * 1.5)
         
-        # Check insurance void (72h delay)
-        if any(k in desc for k in ["delay", "wait", "2 week", "72h", "insurance"]):
+        # Check insurance void
+        if any(k in desc for k in CrisisConfig.INSURANCE_VOID_KEYWORDS):
             mechanisms_triggered.append("CONCEPT_INSURANCE_VOID")
-            insurance_loss = 20000000  # $20M example
+            insurance_loss = CrisisConfig.INSURANCE_LOSS_DEFAULT
             financial_score = min(10, financial_score + 3)
         
         # Calculate totals
-        base_penalty_estimate = 1000000  # $1M base
-        total_penalty = (base_penalty_estimate * multiplier) + insurance_loss
+        base_penalty = CrisisConfig.BASE_PENALTY_ESTIMATE
+        total_penalty = (base_penalty * multiplier) + insurance_loss
         total_risk = (financial_score + ethical_score + legal_score) / 3
         
         result = {
@@ -201,7 +115,7 @@ class RiskCalculatorTool(BaseTool):
             "ethical_score": ethical_score,
             "legal_score": legal_score,
             "total_risk": round(total_risk, 1),
-            "risk_level": "CRITICAL" if total_risk > 7 else "HIGH" if total_risk > 5 else "MEDIUM",
+            "risk_level": CrisisConfig.get_risk_level(total_risk),
             "mechanisms_triggered": mechanisms_triggered,
             "penalty_multiplier": multiplier,
             "insurance_loss_estimate": f"${insurance_loss:,}" if insurance_loss else "$0",
@@ -219,36 +133,30 @@ class EdgeTraversalTool(BaseTool):
     Returns all connected nodes with relationships (VIOLATED, COMPLIED, TRIGGERS, ACTIVATES, etc).
     Use this to understand causal chains: Action -> Mechanism -> Consequence."""
     
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
-    
     def _run(self, node_id: str) -> str:
-        """Find all edges connected to the given node."""
-        edges = self.knowledge_base.get("edges", [])
+        """Find all edges connected to the given node using O(1) indexed lookup."""
+        ks = get_knowledge_service()
         connected = []
         
-        for edge in edges:
-            if edge["source"] == node_id:
-                connected.append({
-                    "direction": "outgoing",
-                    "relationship": edge["relationship"],
-                    "target": edge["target"]
-                })
-            elif edge["target"] == node_id:
-                connected.append({
-                    "direction": "incoming",
-                    "relationship": edge["relationship"],
-                    "source": edge["source"]
-                })
+        # O(1) outgoing edges lookup
+        for edge in ks.get_outgoing_edges(node_id):
+            target_node = ks.get_node(edge["target"])
+            connected.append({
+                "direction": "outgoing",
+                "relationship": edge["relationship"],
+                "target": edge["target"],
+                "target_type": target_node.get("type") if target_node else None
+            })
+        
+        # O(1) incoming edges lookup
+        for edge in ks.get_incoming_edges(node_id):
+            source_node = ks.get_node(edge["source"])
+            connected.append({
+                "direction": "incoming",
+                "relationship": edge["relationship"],
+                "source": edge["source"],
+                "source_type": source_node.get("type") if source_node else None
+            })
         
         if not connected:
             return f"No edges found for node: {node_id}"
@@ -257,33 +165,17 @@ class EdgeTraversalTool(BaseTool):
 
 
 class MechanismLookupTool(BaseTool):
-    """Tool for looking up Risk and Financial mechanisms (v3.1)."""
+    """Tool for looking up Risk and Financial mechanisms."""
     
     name: str = "mechanism_lookup"
     description: str = """Look up Risk_Mechanism and Financial_Mechanism nodes from the knowledge base.
     These mechanisms transform actions into consequences with multiplier effects.
     Use this to understand second-order effects like insurance voidance or penalty multipliers."""
     
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
-    
     def _run(self, mechanism_type: str = "all") -> str:
         """Get mechanisms by type: 'risk', 'financial', or 'all'."""
-        mechanisms = self.knowledge_base.get("mechanisms", [])
-        
-        if mechanism_type.lower() == "risk":
-            mechanisms = [m for m in mechanisms if m["type"] == "Risk_Mechanism"]
-        elif mechanism_type.lower() == "financial":
-            mechanisms = [m for m in mechanisms if m["type"] == "Financial_Mechanism"]
+        ks = get_knowledge_service()
+        mechanisms = ks.get_mechanisms_by_type(mechanism_type)
         
         if not mechanisms:
             return "No mechanisms found."
@@ -292,7 +184,7 @@ class MechanismLookupTool(BaseTool):
 
 
 class CausalChainTool(BaseTool):
-    """Tool for tracing complete causal chains: Action -> Mechanism -> Consequence (v3.1)."""
+    """Tool for tracing complete causal chains: Action -> Mechanism -> Consequence."""
     
     name: str = "causal_chain_trace"
     description: str = """Trace the full causal chain for a given action.
@@ -300,81 +192,67 @@ class CausalChainTool(BaseTool):
     Use this to understand the complete impact of a proposed decision.
     Input: action keywords like 'delay', 'conceal', 'disclose'."""
     
-    knowledge_base: dict = Field(default_factory=dict)
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._load_knowledge_base()
-    
-    def _load_knowledge_base(self):
-        kb_path = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-        if os.path.exists(kb_path):
-            with open(kb_path, "r", encoding="utf-8") as f:
-                self.knowledge_base = json.load(f)
-    
     def _run(self, action_keywords: str) -> str:
-        """Trace causal chain from action to consequence."""
+        """Trace causal chain from action to consequence using graph traversal."""
+        ks = get_knowledge_service()
         keywords = [k.strip().lower() for k in action_keywords.split(",")]
         
         # Find matching action
         matched_action = None
-        for action in self.knowledge_base.get("actions", []):
-            action_keywords_list = [k.lower() for k in action.get("keywords", [])]
+        for action in ks.actions:
+            action_kw = [k.lower() for k in action.get("keywords", [])]
             tags = [t.lower() for t in action.get("tags", [])]
-            if any(k in " ".join(action_keywords_list + tags) for k in keywords):
+            if any(k in " ".join(action_kw + tags) for k in keywords):
                 matched_action = action
                 break
         
         if not matched_action:
             return f"No action found matching: {action_keywords}"
         
-        # Find edges from this action
-        edges = self.knowledge_base.get("edges", [])
+        # Use indexed edge lookup to find connections
         triggered_mechanisms = []
         violated_rules = []
         
-        for edge in edges:
-            if edge["source"] == matched_action["id"]:
-                target_id = edge["target"]
-                relationship = edge["relationship"]
+        for edge in ks.get_outgoing_edges(matched_action["id"]):
+            target_id = edge["target"]
+            target_node = ks.get_node(target_id)
+            
+            if target_node:
+                node_type = target_node.get("type", "")
                 
-                # Find the target node
-                for mech in self.knowledge_base.get("mechanisms", []):
-                    if mech["id"] == target_id:
-                        triggered_mechanisms.append({
-                            "mechanism_id": mech["id"],
-                            "relationship": relationship,
-                            "type": mech["type"],
-                            "definition": mech.get("definition", ""),
-                            "effect": mech.get("effect", ""),
-                            "multiplier": mech.get("multiplier_value"),
-                            "financial_impact": mech.get("financial_impact"),
-                            "typical_exposure": mech.get("typical_exposure")
-                        })
-                
-                for rule in self.knowledge_base.get("rules", []):
-                    if rule["id"] == target_id:
-                        violated_rules.append({
-                            "rule_id": rule["id"],
-                            "relationship": relationship,
-                            "type": rule["type"],
-                            "weight": rule["weight"],
-                            "content": rule["content"],
-                            "penalty": rule.get("penalty", "")
-                        })
+                if "Mechanism" in node_type:
+                    triggered_mechanisms.append({
+                        "mechanism_id": target_id,
+                        "relationship": edge["relationship"],
+                        "type": node_type,
+                        "definition": target_node.get("definition", ""),
+                        "effect": target_node.get("effect", ""),
+                        "multiplier": target_node.get("multiplier_value"),
+                        "financial_impact": target_node.get("financial_impact"),
+                        "typical_exposure": target_node.get("typical_exposure")
+                    })
+                elif target_node.get("type") in ("Law_Hard", "Heuristic_Soft"):
+                    violated_rules.append({
+                        "rule_id": target_id,
+                        "relationship": edge["relationship"],
+                        "type": target_node["type"],
+                        "weight": target_node.get("weight"),
+                        "content": target_node.get("content", ""),
+                        "penalty": target_node.get("penalty", "")
+                    })
         
-        # Find precedents that match this pattern
+        # Find matching precedents using keyword search
         matching_precedents = []
-        for prec in self.knowledge_base.get("precedents", []):
-            prec_tags = [t.lower() for t in prec.get("tags", [])]
-            if any(k in " ".join(prec_tags) for k in keywords):
-                matching_precedents.append({
-                    "precedent_id": prec["id"],
-                    "type": prec["type"],
-                    "action": prec.get("action", ""),
-                    "consequence": prec.get("consequence", ""),
-                    "legal_citation": prec.get("legal_citation", "")
-                })
+        precedent_results = ks.search_by_keywords(keywords, ["precedents"])
+        for prec in precedent_results[:3]:
+            matching_precedents.append({
+                "precedent_id": prec["id"],
+                "type": prec.get("type", ""),
+                "action": prec.get("action", ""),
+                "consequence": prec.get("consequence", ""),
+                "legal_citation": prec.get("legal_citation", ""),
+                "match_score": prec.get("match_score", 0)
+            })
         
         # Calculate total exposure
         total_multiplier = 1.0
@@ -383,7 +261,7 @@ class CausalChainTool(BaseTool):
             if mech.get("multiplier"):
                 total_multiplier *= mech["multiplier"]
             if "insurance" in mech.get("definition", "").lower():
-                insurance_exposure = 20000000  # $20M default
+                insurance_exposure = CrisisConfig.INSURANCE_LOSS_DEFAULT
         
         result = {
             "action": {
@@ -404,3 +282,88 @@ class CausalChainTool(BaseTool):
         
         return json.dumps(result, indent=2, ensure_ascii=False)
 
+
+class PathFinderTool(BaseTool):
+    """NEW: Tool for finding paths between nodes in the knowledge graph."""
+    
+    name: str = "path_finder"
+    description: str = """Find all paths between two nodes in the knowledge graph.
+    Use this to discover indirect relationships and causal chains.
+    Input: 'start_node_id, end_node_id' (comma-separated).
+    Returns paths with the nodes traversed."""
+    
+    def _run(self, nodes: str) -> str:
+        """Find paths between two nodes using BFS."""
+        ks = get_knowledge_service()
+        
+        parts = [n.strip() for n in nodes.split(",")]
+        if len(parts) != 2:
+            return "Error: Provide exactly two node IDs separated by comma."
+        
+        start_id, end_id = parts
+        
+        # Validate nodes exist
+        if not ks.get_node(start_id):
+            return f"Error: Start node '{start_id}' not found."
+        if not ks.get_node(end_id):
+            return f"Error: End node '{end_id}' not found."
+        
+        # Find all paths
+        paths = ks.find_all_paths(start_id, end_id, max_depth=4)
+        
+        if not paths:
+            return f"No path found between '{start_id}' and '{end_id}'."
+        
+        # Format paths with node details
+        formatted_paths = []
+        for path in paths:
+            path_details = []
+            for node_id in path:
+                node = ks.get_node(node_id)
+                path_details.append({
+                    "id": node_id,
+                    "type": node.get("type") if node else "Unknown"
+                })
+            formatted_paths.append(path_details)
+        
+        return json.dumps({
+            "start": start_id,
+            "end": end_id,
+            "paths_found": len(paths),
+            "paths": formatted_paths
+        }, indent=2)
+
+
+class ReachabilityTool(BaseTool):
+    """NEW: Tool for finding all nodes reachable from a given node."""
+    
+    name: str = "reachability_analysis"
+    description: str = """Find all nodes reachable from a given starting node.
+    Returns nodes with their distance (hop count) from the start.
+    Use this to understand the full impact scope of an action or decision."""
+    
+    def _run(self, start_node: str) -> str:
+        """Get all reachable nodes with distances."""
+        ks = get_knowledge_service()
+        
+        if not ks.get_node(start_node):
+            return f"Error: Node '{start_node}' not found."
+        
+        reachable = ks.get_reachable_nodes(start_node, max_depth=4)
+        
+        # Group by distance
+        by_distance = {}
+        for node_id, distance in reachable.items():
+            if distance not in by_distance:
+                by_distance[distance] = []
+            node = ks.get_node(node_id)
+            by_distance[distance].append({
+                "id": node_id,
+                "type": node.get("type") if node else "Unknown"
+            })
+        
+        return json.dumps({
+            "start_node": start_node,
+            "total_reachable": len(reachable),
+            "nodes_by_distance": by_distance
+        }, indent=2)
