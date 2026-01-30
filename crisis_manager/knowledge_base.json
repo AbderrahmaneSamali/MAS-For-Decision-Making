@@ -1,0 +1,572 @@
+{
+  "@context": "Managerial_Crisis_DB_v3.1",
+  "cases": [
+    {
+      "id": "CASE_1.1_NEPOTISM",
+      "type": "Case_Dilemma",
+      "title": "Le Recrutement du Fils du Directeur Commercial",
+      "category": "Conflit d'Intérêts",
+      "tags": [
+        "nepotism",
+        "recruitment",
+        "loyalty",
+        "meritocracy"
+      ],
+      "stakeholders": [
+        "Jean-Marc (Père, Key Employee)",
+        "Thomas (Fils, Candidat)",
+        "Sophie (Candidat Externe, Meilleure)"
+      ],
+      "financial_risk": "Perte de 40% du CA (35M€) si Jean-Marc part",
+      "ethical_risk": "Népotisme, Démotivation équipe (Turnover 18%)",
+      "legal_risk": "Faible (Thomas est qualifié), mais risque réputationnel",
+      "dilemma": "Loyauté envers un homme clé vs Méritocratie",
+      "key_fact": "Coût remplacement Jean-Marc: 200K€. ROI poste: 3M€.",
+      "sentiment": -0.3
+    },
+    {
+      "id": "CASE_1.2_SUPPLIER_SHARES",
+      "type": "Case_Dilemma",
+      "title": "Le Fournisseur avec Actionnaire Caché",
+      "category": "Conflit d'Intérêts",
+      "tags": [
+        "conflict_of_interest",
+        "supplier",
+        "hidden_shares",
+        "procurement"
+      ],
+      "stakeholders": [
+        "Michel (Acheteur, 22 ans ancienneté)",
+        "TechSupply (Fournisseur)"
+      ],
+      "financial_risk": "Surcoût 5-7% (180K€ sur 5 ans) vs Économies Michel (400K€/an)",
+      "ethical_risk": "Enrichissement personnel non déclaré (6K€ dividendes/an)",
+      "legal_risk": "Licenciement abusif difficile à prouver (Qualité fournisseur OK)",
+      "dilemma": "Sanctionner la malhonnêteté vs Préserver la performance globale",
+      "key_fact": "Michel possède 8% du fournisseur. Pas déclaré.",
+      "sentiment": -0.5
+    },
+    {
+      "id": "CASE_1.3_INSIDER_TRADING",
+      "type": "Case_Dilemma",
+      "title": "L'Information Privilégiée sur la Fusion",
+      "category": "Confidentialité vs Rétention",
+      "tags": [
+        "insider_trading",
+        "merger",
+        "talent_retention",
+        "confidentiality"
+      ],
+      "stakeholders": [
+        "DRH (Vous)",
+        "Sarah (R&D)",
+        "Thomas (Commercial)",
+        "Lisa (IT)"
+      ],
+      "financial_risk": "Perte des 3 talents = 500K€ + échec fusion",
+      "ethical_risk": "Délit d'initié si info divulguée",
+      "legal_risk": "Licenciement pour faute grave + Poursuites pénales",
+      "dilemma": "Sauver les talents en violant la loi vs Laisser partir et échouer",
+      "key_fact": "Fusion secrète valorise boîte à 120M€. Annonce dans 6 jours.",
+      "sentiment": -0.6
+    },
+    {
+      "id": "CASE_1.4_HR_COACHING",
+      "type": "Case_Dilemma",
+      "title": "La DRH Coach Externe",
+      "category": "Abus de Pouvoir",
+      "tags": [
+        "abuse_of_power",
+        "coaching",
+        "conflict_of_interest",
+        "HR"
+      ],
+      "stakeholders": [
+        "Nathalie (DRH)",
+        "Employés coachés"
+      ],
+      "financial_risk": "Perte Nathalie (Valeur 300K€/an) vs Revenus coaching (12.6K€)",
+      "ethical_risk": "Pression hiérarchique implicite, Conflit d'intérêts",
+      "legal_risk": "Plainte pour abus de pouvoir (20-50K€)",
+      "dilemma": "Tolérer une dérive éthique pour garder une performeuse",
+      "key_fact": "7 employés ont payé 1800€ à leur propre DRH.",
+      "sentiment": -0.4
+    },
+    {
+      "id": "CASE_1.5_SALES_SIDE_BUSINESS",
+      "type": "Case_Dilemma",
+      "title": "Le Commercial avec Micro-Entreprise",
+      "category": "Concurrence Déloyale",
+      "tags": [
+        "competition",
+        "side_business",
+        "client_theft",
+        "top_performer"
+      ],
+      "stakeholders": [
+        "Julien (Top Performer 15% CA)",
+        "Clients"
+      ],
+      "financial_risk": "Perte 4.2M€ CA si Julien part avec clients",
+      "ethical_risk": "Utilisation ressources entreprise pour gain perso",
+      "legal_risk": "Violation clause exclusivité/non-concurrence",
+      "dilemma": "Licencier un voleur qui rapporte gros vs Négocier une part",
+      "key_fact": "Julien facture 67K€ en direct à VOS clients.",
+      "sentiment": -0.6
+    },
+    {
+      "id": "CASE_1.6_CFO_COMPETITOR",
+      "type": "Case_Dilemma",
+      "title": "L'Investissement du DAF chez le Concurrent",
+      "category": "Loyauté & Stratégie",
+      "tags": [
+        "loyalty",
+        "competitor",
+        "investment",
+        "sabotage"
+      ],
+      "stakeholders": [
+        "Guillaume (DAF)",
+        "OptiTech (Concurrent)"
+      ],
+      "financial_risk": "Perte 1.6M€ CA (Sabotage projet interne?)",
+      "ethical_risk": "Investissement personnel massif chez concurrent (312K€)",
+      "legal_risk": "Difficile de prouver le sabotage/délit d'initié",
+      "dilemma": "Licencier un ami compétent (sans preuve formelle) vs Garder un traître potentiel",
+      "key_fact": "Gain latent perso Guillaume: +125K€ grâce au concurrent.",
+      "sentiment": -0.7
+    },
+    {
+      "id": "CASE_1.7_OFFICE_ROMANCE",
+      "type": "Case_Dilemma",
+      "title": "La Relation Amoureuse Hiérarchique",
+      "category": "Favoritisme",
+      "tags": [
+        "favoritism",
+        "romance",
+        "hierarchy",
+        "discrimination"
+      ],
+      "stakeholders": [
+        "Marc (Directeur)",
+        "Émilie (Manager)",
+        "Équipe frustrée"
+      ],
+      "financial_risk": "Perte du duo star (21% CA) vs Turnover équipe (22%)",
+      "ethical_risk": "Favoritisme avéré (Evaluations/Primes biaisées)",
+      "legal_risk": "Plainte pour discrimination (Sophie)",
+      "dilemma": "Vie privée vs Équité professionnelle",
+      "key_fact": "Émilie a eu +12% augmentation (2x la moyenne) évaluée par son amant.",
+      "sentiment": -0.5
+    },
+    {
+      "id": "CASE_1.8_HR_KICKBACKS",
+      "type": "Case_Dilemma",
+      "title": "Le RH Rémunéré par le Cabinet",
+      "category": "Corruption",
+      "tags": [
+        "corruption",
+        "kickbacks",
+        "recruitment",
+        "fraud"
+      ],
+      "stakeholders": [
+        "Alain (RH)",
+        "TalentFirst (Cabinet)",
+        "François (Ami)"
+      ],
+      "financial_risk": "Surcoût recrutement 50-100K€",
+      "ethical_risk": "Corruption active (Commissions occultes 13K€)",
+      "legal_risk": "Pénal (Corruption privée), Faute grave",
+      "dilemma": "Tolérer la petite corruption efficace vs Nettoyer au prix fort",
+      "key_fact": "Preuves bancaires: Alain reçoit 4% de com sur les contrats qu'il signe.",
+      "sentiment": -0.8
+    }
+  ],
+  "precedents": [
+    {
+      "id": "PRECEDENT_UBER_2016",
+      "type": "Case_Failure",
+      "tags": [
+        "ransomware",
+        "concealment",
+        "bug_bounty",
+        "data_breach",
+        "delay"
+      ],
+      "action": "Disguised ransom as bug bounty",
+      "consequence": "$148M Fine + Felony Conviction",
+      "sentiment": -0.9,
+      "legal_citation": "US v. Sullivan (2022)"
+    },
+    {
+      "id": "PRECEDENT_HYDRO_2019",
+      "type": "Case_Success",
+      "tags": [
+        "ransomware",
+        "transparency",
+        "manufacturing",
+        "immediate_disclosure"
+      ],
+      "action": "Refused payment, Full transparency",
+      "consequence": "Stock +1%, Brand Trust High",
+      "sentiment": 0.8
+    },
+    {
+      "id": "PRECEDENT_COLONIAL_2021",
+      "type": "Case_Mixed",
+      "tags": [
+        "ransomware",
+        "critical_infra",
+        "payment"
+      ],
+      "action": "Paid $4.4M for speed",
+      "consequence": "Decryption tool failed (slow), Regulatory crackdown",
+      "sentiment": -0.4
+    },
+    {
+      "id": "PRECEDENT_EQUIFAX_2017",
+      "type": "Case_Failure",
+      "tags": [
+        "data_breach",
+        "delay",
+        "concealment",
+        "stock_sale"
+      ],
+      "action": "Delayed disclosure 6 weeks while execs sold stock",
+      "consequence": "$575M FTC Settlement + Class Action",
+      "sentiment": -0.95,
+      "legal_citation": "FTC v. Equifax (2019)"
+    }
+  ],
+  "rules": [
+    {
+      "id": "RULE_GDPR_33",
+      "type": "Law_Hard",
+      "weight": 10,
+      "content": "Mandatory notification of regulator within 72h of breach awareness.",
+      "penalty": "4% Global Turnover",
+      "tags": [
+        "gdpr",
+        "breach",
+        "notification",
+        "europe",
+        "72h"
+      ]
+    },
+    {
+      "id": "RULE_OFAC_SANCTIONS",
+      "type": "Law_Hard",
+      "weight": 10,
+      "content": "Strict liability for paying sanctioned entities (Lazarus, Evil Corp, etc).",
+      "penalty": "Criminal/Civil Fines",
+      "tags": [
+        "sanctions",
+        "payment",
+        "criminal",
+        "ransomware"
+      ]
+    },
+    {
+      "id": "RULE_FINANCIAL_PRAGMATISM",
+      "type": "Heuristic_Soft",
+      "weight": 4,
+      "content": "IF Cost of Action > Cost of Inaction AND Ethical Risk is Low, THEN Favor Action.",
+      "tags": [
+        "cost",
+        "pragmatism",
+        "efficiency",
+        "stock_price"
+      ]
+    },
+    {
+      "id": "RULE_ETHICAL_HARDLINE",
+      "type": "Heuristic_Soft",
+      "weight": 9,
+      "content": "IF Integrity Violation is proven (Theft, Corruption), THEN Zero Tolerance regardless of Performance.",
+      "tags": [
+        "ethics",
+        "integrity",
+        "zero_tolerance",
+        "corruption"
+      ]
+    },
+    {
+      "id": "RULE_LEGAL_PRUDENCE",
+      "type": "Heuristic_Soft",
+      "weight": 7,
+      "content": "IF Proof is weak AND Legal Risk is High, THEN Negotiate (Transaction) instead of Fire.",
+      "tags": [
+        "legal",
+        "negotiation",
+        "prudence"
+      ]
+    },
+    {
+      "id": "RULE_HUMAN_COMPASSION",
+      "type": "Heuristic_Soft",
+      "weight": 6,
+      "content": "IF Employee is Vulnerable (Single Mom, Senior) AND Performance is borderline, THEN Seek Remediation before Firing.",
+      "tags": [
+        "compassion",
+        "vulnerable",
+        "remediation"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "id": "CONCEPT_CONCEALMENT_MULTIPLIER",
+      "type": "Risk_Mechanism",
+      "tags": [
+        "concealment",
+        "delay",
+        "criminal",
+        "fraud"
+      ],
+      "definition": "Deliberate hiding of material breach facts.",
+      "effect": "Transforms civil negligence into criminal liability.",
+      "multiplier_value": 3.5,
+      "formula": "Final_Legal_Penalty = Base_Penalty * 3.5"
+    },
+    {
+      "id": "CONCEPT_TRUST_PARADOX",
+      "type": "Risk_Mechanism",
+      "tags": [
+        "transparency",
+        "trust",
+        "reputation",
+        "disclosure"
+      ],
+      "definition": "The Transparency Paradox.",
+      "effect": "Admitting failure fast increases trust; Hiding it destroys trust permanently.",
+      "stock_impact_if_transparent": "-5% initial, +2% recovery within 30 days",
+      "stock_impact_if_hidden": "-15% to -40% when discovered, no recovery"
+    },
+    {
+      "id": "CONCEPT_INSURANCE_VOID",
+      "type": "Financial_Mechanism",
+      "tags": [
+        "insurance",
+        "cyber_insurance",
+        "delay",
+        "72h",
+        "void"
+      ],
+      "definition": "Voiding of Cyber-Insurance Policy.",
+      "trigger_condition": "Delaying breach report beyond 72h window.",
+      "financial_impact": "Loss of 100% policy coverage.",
+      "typical_exposure": "$10M-$50M uninsured liability"
+    },
+    {
+      "id": "CONCEPT_REGULATORY_ESCALATION",
+      "type": "Risk_Mechanism",
+      "tags": [
+        "delay",
+        "regulatory",
+        "escalation",
+        "investigation"
+      ],
+      "definition": "Regulatory Escalation Ladder.",
+      "effect": "Each week of delay increases regulatory scrutiny level.",
+      "stages": [
+        {
+          "delay_days": 3,
+          "action": "Standard review"
+        },
+        {
+          "delay_days": 14,
+          "action": "Formal investigation"
+        },
+        {
+          "delay_days": 30,
+          "action": "Criminal referral possible"
+        }
+      ]
+    },
+    {
+      "id": "CONCEPT_EXECUTIVE_LIABILITY",
+      "type": "Risk_Mechanism",
+      "tags": [
+        "executive",
+        "personal_liability",
+        "criminal",
+        "cover_up"
+      ],
+      "definition": "Personal Criminal Liability for Executives.",
+      "effect": "Cover-up decisions expose individual executives to personal criminal charges.",
+      "precedent": "Joe Sullivan (Uber CSO) - Felony conviction for concealment"
+    }
+  ],
+  "actions": [
+    {
+      "id": "ACTION_DELAY_REPORTING",
+      "type": "Action",
+      "tags": [
+        "delay",
+        "reporting",
+        "breach",
+        "wait"
+      ],
+      "description": "Delaying breach notification beyond regulatory deadline.",
+      "keywords": [
+        "wait",
+        "delay",
+        "2 weeks",
+        "fix first",
+        "patch first"
+      ]
+    },
+    {
+      "id": "ACTION_IMMEDIATE_DISCLOSURE",
+      "type": "Action",
+      "tags": [
+        "disclosure",
+        "transparency",
+        "immediate",
+        "notify"
+      ],
+      "description": "Immediate notification to regulators and affected parties.",
+      "keywords": [
+        "report now",
+        "notify immediately",
+        "disclose",
+        "transparency"
+      ]
+    },
+    {
+      "id": "ACTION_CONCEAL_AS_BOUNTY",
+      "type": "Action",
+      "tags": [
+        "concealment",
+        "bug_bounty",
+        "disguise",
+        "fraud"
+      ],
+      "description": "Disguising ransom payment as bug bounty reward.",
+      "keywords": [
+        "bug bounty",
+        "hide",
+        "conceal",
+        "disguise payment"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "PRECEDENT_UBER_2016",
+      "relationship": "VIOLATED",
+      "target": "RULE_GDPR_33"
+    },
+    {
+      "source": "PRECEDENT_UBER_2016",
+      "relationship": "VIOLATED",
+      "target": "RULE_ETHICAL_HARDLINE"
+    },
+    {
+      "source": "PRECEDENT_UBER_2016",
+      "relationship": "ACTIVATED",
+      "target": "CONCEPT_CONCEALMENT_MULTIPLIER"
+    },
+    {
+      "source": "PRECEDENT_UBER_2016",
+      "relationship": "ACTIVATED",
+      "target": "CONCEPT_EXECUTIVE_LIABILITY"
+    },
+    {
+      "source": "PRECEDENT_COLONIAL_2021",
+      "relationship": "ATTEMPTED",
+      "target": "RULE_FINANCIAL_PRAGMATISM"
+    },
+    {
+      "source": "PRECEDENT_COLONIAL_2021",
+      "relationship": "RISKED",
+      "target": "RULE_OFAC_SANCTIONS"
+    },
+    {
+      "source": "PRECEDENT_HYDRO_2019",
+      "relationship": "COMPLIED",
+      "target": "RULE_ETHICAL_HARDLINE"
+    },
+    {
+      "source": "PRECEDENT_HYDRO_2019",
+      "relationship": "ACTIVATED",
+      "target": "CONCEPT_TRUST_PARADOX"
+    },
+    {
+      "source": "PRECEDENT_EQUIFAX_2017",
+      "relationship": "VIOLATED",
+      "target": "RULE_GDPR_33"
+    },
+    {
+      "source": "PRECEDENT_EQUIFAX_2017",
+      "relationship": "ACTIVATED",
+      "target": "CONCEPT_CONCEALMENT_MULTIPLIER"
+    },
+    {
+      "source": "PRECEDENT_EQUIFAX_2017",
+      "relationship": "ACTIVATED",
+      "target": "CONCEPT_INSURANCE_VOID"
+    },
+    {
+      "source": "ACTION_DELAY_REPORTING",
+      "relationship": "TRIGGERS",
+      "target": "CONCEPT_INSURANCE_VOID"
+    },
+    {
+      "source": "ACTION_DELAY_REPORTING",
+      "relationship": "VIOLATES",
+      "target": "RULE_GDPR_33"
+    },
+    {
+      "source": "ACTION_DELAY_REPORTING",
+      "relationship": "ACTIVATES",
+      "target": "CONCEPT_REGULATORY_ESCALATION"
+    },
+    {
+      "source": "ACTION_DELAY_REPORTING",
+      "relationship": "ACTIVATES",
+      "target": "CONCEPT_CONCEALMENT_MULTIPLIER"
+    },
+    {
+      "source": "ACTION_CONCEAL_AS_BOUNTY",
+      "relationship": "ACTIVATES",
+      "target": "CONCEPT_CONCEALMENT_MULTIPLIER"
+    },
+    {
+      "source": "ACTION_CONCEAL_AS_BOUNTY",
+      "relationship": "ACTIVATES",
+      "target": "CONCEPT_EXECUTIVE_LIABILITY"
+    },
+    {
+      "source": "ACTION_IMMEDIATE_DISCLOSURE",
+      "relationship": "ACTIVATES",
+      "target": "CONCEPT_TRUST_PARADOX"
+    },
+    {
+      "source": "ACTION_IMMEDIATE_DISCLOSURE",
+      "relationship": "COMPLIES",
+      "target": "RULE_GDPR_33"
+    },
+    {
+      "source": "CONCEPT_CONCEALMENT_MULTIPLIER",
+      "relationship": "INCREASES",
+      "target": "RULE_GDPR_33"
+    },
+    {
+      "source": "CASE_1.8_HR_KICKBACKS",
+      "relationship": "VIOLATED",
+      "target": "RULE_ETHICAL_HARDLINE"
+    },
+    {
+      "source": "CASE_1.2_SUPPLIER_SHARES",
+      "relationship": "VIOLATED",
+      "target": "RULE_ETHICAL_HARDLINE"
+    },
+    {
+      "source": "CASE_1.5_SALES_SIDE_BUSINESS",
+      "relationship": "VIOLATED",
+      "target": "RULE_ETHICAL_HARDLINE"
+    }
+  ]
+}
