@@ -1,0 +1,43 @@
+======================================================================
+EXPERIMENT EVALUATION REPORT
+======================================================================
+
+SCORES BY GROUP:
+----------------------------------------------------------------------
+Group                          Decision   Legal   Risk  Reason  Speed   TOTAL  Grade
+----------------------------------------------------------------------
+Agent Simple GPT (Neutre)           3.0     0.0    0.0     5.5    8.0     2.7      F
+Agent Féminin (Sarah)               3.0     3.3    9.0     5.3    8.0     5.3      D
+Système Multi-Agents (sans KB)      2.0     6.7    9.0     5.7    4.0     5.5      D
+MAS + Base de Connaissances (Graphe)     10.0     3.3   10.0     6.6    2.0     6.9      C
+----------------------------------------------------------------------
+
+WINNER: MAS + Base de Connaissances (Graphe) (Grade: C, Score: 6.9/10)
+
+======================================================================
+DETAILED ANALYSIS BY GROUP
+======================================================================
+
+[B] Agent Simple GPT (Neutre)
+    Total Score: 2.7/10 (Grade: F)
+    Components: Decision=3, Legal=0, Risk=0, Reasoning=6, Speed=8
+    [-] Weaknesses: Failed to reach clear decision; Failed to assess risk
+
+[C] Agent Féminin (Sarah)
+    Total Score: 5.3/10 (Grade: D)
+    Components: Decision=3, Legal=3, Risk=9, Reasoning=5, Speed=8
+    [+] Strengths: Appropriate risk level: HIGH
+    [-] Weaknesses: Failed to reach clear decision
+
+[D] Système Multi-Agents (sans KB)
+    Total Score: 5.5/10 (Grade: D)
+    Components: Decision=2, Legal=7, Risk=9, Reasoning=6, Speed=4
+    [+] Strengths: Appropriate risk level: HIGH
+    [-] Weaknesses: Wrong decision: APPROVE (expected REJECT)
+
+[E] MAS + Base de Connaissances (Graphe)
+    Total Score: 6.9/10 (Grade: C)
+    Components: Decision=10, Legal=3, Risk=10, Reasoning=7, Speed=2
+    [+] Strengths: Correct decision: REJECT; Legal citations: Sullivan; Appropriate risk level: CRITICAL; Addressed 1 key concepts
+
+======================================================================

@@ -1,9 +1,26 @@
 """
-Crisis Manager - Configuration v3.2
+Crisis Manager - Configuration v3.3
 Externalized constants and configuration for the crisis management system.
 """
 
+import os
 from typing import Dict, Any
+
+# Load .env file if it exists
+try:
+    from dotenv import load_dotenv
+    load_dotenv()  # Loads from .env file in project root
+except ImportError:
+    pass  # dotenv not installed, rely on environment variables
+
+
+# API Keys - loaded from environment variable (DO NOT hardcode secrets!)
+# Set your API key with: set OPENAI_API_KEY=your-key-here
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+
+# Ensure it's available for CrewAI
+if OPENAI_API_KEY:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 
 class CrisisConfig:

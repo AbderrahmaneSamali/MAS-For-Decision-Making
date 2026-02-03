@@ -1,0 +1,41 @@
+{
+  "decisions": [
+    {
+      "id": "DEC_20260203_185000",
+      "timestamp": "2026-02-03T18:50:00.507592",
+      "scenario_hash": "e3d5931fa8c34931",
+      "scenario_preview": "**Contexte détaillé :**\nJean-Marc Bertrand, votre directeur commercial depuis 8 ans, vous propose d'embaucher son fils Thomas, 28 ans, pour le poste nouvellement créé de Responsable Développement Comm...",
+      "verdict": "REJECT",
+      "precedent_used": "PRECEDENT_UBER_2016",
+      "risk_scores": {},
+      "rules_cited": [],
+      "confidence": null
+    },
+    {
+      "id": "DEC_20260203_191139",
+      "timestamp": "2026-02-03T19:11:39.773502",
+      "scenario_hash": "119f89bd96122545",
+      "scenario_preview": "**Contexte détaillé :**Jean-Marc Bertrand, votre directeur commercial depuis 8 ans, vous propose d'embaucher son fils Thomas, 28 ans, pour le poste nouvellement créé de Responsable Développement Comme...",
+      "verdict": "APPROVE",
+      "precedent_used": null,
+      "risk_scores": {},
+      "rules_cited": [],
+      "confidence": null
+    },
+    {
+      "id": "DEC_20260203_194349",
+      "timestamp": "2026-02-03T19:43:49.442953",
+      "scenario_hash": "b7f03250b185bfc8",
+      "scenario_preview": "**Contexte détaillé :**Vous découvrez par hasard, lors d'une conversation informelle avec un auditeur externe, que Michel Durand, votre Responsable des Achats depuis 5 ans, détient 8% du capital de Te...",
+      "verdict": "REJECT",
+      "precedent_used": null,
+      "risk_scores": {},
+      "rules_cited": [],
+      "confidence": null
+    }
+  ],
+  "precedent_usage": {
+    "PRECEDENT_UBER_2016": 1
+  },
+  "feedback": []
+}

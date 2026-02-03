@@ -1,0 +1,52 @@
+{
+  "scenario": "**Contexte d\u00e9taill\u00e9 :**Vous d\u00e9couvrez par hasard, lors d'une conversation informelle avec un auditeur externe, que Michel Durand, votre Responsable des Achats depuis 5 ans, d\u00e9tient 8% du capital de TechSupply SAS, l'un de vos trois principaux fournisseurs. Sur les 18 derniers mois, TechSupply a re\u00e7u 2,4M\u20ac de commandes de votre entreprise.**Analyse de la situation :**- Les prix de TechSupply sont g\u00e9n\u00e9ralement 5-7% plus \u00e9lev\u00e9s que les concurrents, mais pas scandaleusement- La qualit\u00e9 est bonne (taux de d\u00e9faut : 2,1% vs 2,8% moyenne du secteur)- Les d\u00e9lais de livraison sont excellents (98% de respect des d\u00e9lais vs 89% moyenne)- Michel a toujours pr\u00e9sent\u00e9 3 devis pour chaque appel d'offres, conform\u00e9ment aux proc\u00e9dures- TechSupply gagne environ 60% des appels d'offres trait\u00e9s par Michel**L'enqu\u00eate r\u00e9v\u00e8le :**- Michel a investi 15K\u20ac il y a 7 ans dans TechSupply (startup \u00e0 l'\u00e9poque), maintenant valoris\u00e9s \u00e0 environ 80K\u20ac- Il re\u00e7oit environ 6K\u20ac de dividendes annuels- Il n'a jamais d\u00e9clar\u00e9 ce conflit d'int\u00e9r\u00eat au moment de son recrutement ni depuis- Le fondateur de TechSupply est un ancien camarade de promotion de Michel- Sur les 5 derni\u00e8res ann\u00e9es, privil\u00e9gier syst\u00e9matiquement les moins-disants aurait \u00e9conomis\u00e9 environ 180K\u20ac**\u00c9l\u00e9ments de complexit\u00e9 :**- Michel est un excellent acheteur sur tous les autres dossiers (\u00e9conomies prouv\u00e9es de 400K\u20ac/an sur les autres fournisseurs)- Le licencier pour faute grave risque un proc\u00e8s qu'il pourrait gagner (montant du pr\u00e9judice r\u00e9el difficile \u00e0 prouver)- TechSupply est objectivement un bon fournisseur, pas un choix catastrophique- Votre politique interne interdit les conflits d'int\u00e9r\u00eats mais la sanction n'est pas claire- Certains autres employ\u00e9s ont des participations dans des entreprises diverses (non-fournisseurs)- Michel a 52 ans, 22 ans d'anciennet\u00e9, trois enfants scolaris\u00e9s**Impact potentiel :**- Licenciement : co\u00fbt juridique potentiel (50-80K\u20ac), perte de comp\u00e9tences, besoin de recruter (d\u00e9lai : 4-6 mois)- Maintien avec sanction : pr\u00e9c\u00e9dent ambigu sur les conflits d'int\u00e9r\u00eats, d\u00e9motivation possible de Michel- Exigence de cession des parts : l\u00e9galement compliqu\u00e9, Michel pourrait refuser- R\u00e9organisation : retirer \u00e0 Michel la gestion de TechSupply uniquement (humiliant et compliqu\u00e9 organisationnellement)**D\u00e9couvertes additionnelles :**Votre auditeur sugg\u00e8re d'investiguer d'autres cas similaires. Budget investigation : 25K\u20ac, d\u00e9lai 2 mois.",
+  "timestamp": "2026-02-03T19:43:49.447136",
+  "results": {
+    "B": {
+      "group_code": "B",
+      "group_name": "Agent Simple GPT (Neutre)",
+      "decision": "UNCLEAR",
+      "recommendation": "La situation pr\u00e9sente un certain nombre de dilemmes \u00e9thiques et op\u00e9rationnels. Voici une analyse des diff\u00e9rentes options :\n\n1. Licenciement de Michel : \n   - Avantages : Cela pourrait envoyer un message fort \u00e0 l'\u00e9quipe sur les cons\u00e9quences d'un conflit d'int\u00e9r\u00eats non d\u00e9clar\u00e9. Cela pourrait \u00e9galement permettre \u00e0 l'entreprise de se s\u00e9parer d'un employ\u00e9 qui pourrait poser d'autres probl\u00e8mes \u00e9thiques \u00e0 l'avenir.\n   - Inconv\u00e9nients : Le co\u00fbt juridique potentiel est \u00e9lev\u00e9, sans compter le risque de pe",
+      "reasoning": "Standard AI analysis without specialized knowledge",
+      "legal_citations": [],
+      "risk_assessment": "UNASSESSED",
+      "execution_time_seconds": 19.527311325073242,
+      "token_count": null
+    },
+    "C": {
+      "group_code": "C",
+      "group_name": "Agent F\u00e9minin (Sarah)",
+      "decision": "UNCLEAR",
+      "recommendation": "In my experience, this situation presents a complex challenge that requires a balanced approach. On one hand, Michel's conduct constitutes a clear conflict of interest, which goes against our company's policy. On the other hand, Michel's performance has been commendable, and his contributions have saved the company a significant amount of money. \n\nWe need to consider the potential implications of our actions, not only on Michel but also on the morale of the entire team. Here's my recommendation:",
+      "reasoning": "Female executive persona analysis",
+      "legal_citations": [],
+      "risk_assessment": "HIGH",
+      "execution_time_seconds": 14.78162431716919,
+      "token_count": null
+    },
+    "D": {
+      "group_code": "D",
+      "group_name": "Syst\u00e8me Multi-Agents (sans KB)",
+      "decision": "APPROVE",
+      "recommendation": "**Final Decision: APPROVE** the multi-layered, phased strategy addressing Michel Durand\u2019s conflict of interest and broader organizational risks related to procurement ethics.\n\n**Rationale:**  \nAfter thorough review, the situation\u2019s complexity demands a balanced and comprehensive approach rather than a simplistic punitive or purely procedural reaction. Michel\u2019s undisclosed 8% stake in TechSupply is a serious conflict of interest undermining trust and violating company policy. However, TechSupply ",
+      "reasoning": "Multi-agent deliberation (Challenger, Innovator, Mediator, Decider)",
+      "legal_citations": [],
+      "risk_assessment": "HIGH",
+      "execution_time_seconds": 79.86420512199402,
+      "token_count": null
+    },
+    "E": {
+      "group_code": "E",
+      "group_name": "MAS + Base de Connaissances (Graphe)",
+      "decision": "REJECT",
+      "recommendation": "DECISION: REJECT the option to maintain Michel Durand without substantive sanction due to concealment of conflict of interest.\n\nCITATION: The primary legal citation is US v. Sullivan (2022), where concealment and lack of disclosure of material conflicts and misconduct resulted in felony convictions and substantial penalties, underscoring the precedence of ethical hardline rules (weight 9) and concealment multiplier (3.5) in determining penalties.\n\nEXPOSURE: Calculated total financial exposure is",
+      "reasoning": "MAS with full knowledge graph (precedents, rules, mechanisms)",
+      "legal_citations": [
+        "Sullivan"
+      ],
+      "risk_assessment": "CRITICAL",
+      "execution_time_seconds": 137.9941918849945,
+      "token_count": null
+    }
+  }
+}
